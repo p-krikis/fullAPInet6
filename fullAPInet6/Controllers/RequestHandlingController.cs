@@ -38,7 +38,7 @@ namespace fullAPInet6.Controllers
             }
             else
             {
-                return Ok();
+                return Ok(result);
             }
         }
 

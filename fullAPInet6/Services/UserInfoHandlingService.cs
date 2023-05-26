@@ -35,27 +35,19 @@ namespace fullAPInet6.Services
             using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
-                using (var command = new SqlCommand("SELECT password FROM [dbo].[userInfoList] WHERE email = @email", connection))
+                using (var command = new SqlCommand("SELECT password, userid FROM [dbo].[userInfoList] WHERE email = @email", connection))
                 {
                     command.Parameters.AddWithValue("@email", email);
                     var result = await command.ExecuteReaderAsync();
                     try
                     {
-                        //string fetchedPassword = result.ToString();
-                        //if (parsedData.Password == fetchedPassword)
-                        //{
-                        //    return "Authorized";
-                        //}
-                        //else
-                        //{
-                        //    return null;
-                        //}
                         if (await result.ReadAsync())
                         {
                             string fetchedPassword = result.GetString(0);
                             if (parsedData.Password == fetchedPassword)
                             {
-                                return "Authorized";
+                                string userId = result.GetString(1);
+                                return userId;
                             }
                             else
                             {
