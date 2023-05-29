@@ -16,7 +16,7 @@ namespace fullAPInet6.Services
 
         public async Task<int> SaveUserInfo (string jsonString)
         {
-            ParsingModels parsedData = JsonConvert.DeserializeObject<ParsingModels>(jsonString);
+            UserParsingModels parsedData = JsonConvert.DeserializeObject<UserParsingModels>(jsonString);
             int userListId;
             string bob= parsedData.Username;
             using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
@@ -30,7 +30,7 @@ namespace fullAPInet6.Services
         }
         public async Task<string> AuthUser(string jsonString)
         {
-            ParsingModels parsedData = JsonConvert.DeserializeObject<ParsingModels>(jsonString);
+            UserParsingModels parsedData = JsonConvert.DeserializeObject<UserParsingModels>(jsonString);
             string email = parsedData.Email;
             using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
