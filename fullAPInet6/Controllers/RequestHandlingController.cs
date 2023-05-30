@@ -67,7 +67,6 @@ namespace fullAPInet6.Controllers
         {
             string targetUserId = content.userId;
             var lists = await _listDataHandlingService.LoadAllLists(targetUserId);
-            //var serializedLists = JsonConvert.SerializeObject(lists);
             return Ok(lists);
         }
 
