@@ -3,6 +3,9 @@ using fullAPInet6.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace fullAPInet6.Controllers
 {
@@ -41,6 +44,7 @@ namespace fullAPInet6.Controllers
                 return Ok(result);
             }
         }
+
         [HttpDelete("deleteUserByListId/{userListId}")]
         public async Task<IActionResult> DeleteUser(int userListId)
         {
@@ -51,27 +55,31 @@ namespace fullAPInet6.Controllers
         //listHandling below
 
         [HttpPost("saveListData")]
-        public async Task<IActionResult>SaveList([FromBody] ListParsingModels content)
+        public async Task<IActionResult> SaveList([FromBody] ListParsingModels content)
         {
             string jsonData = JsonConvert.SerializeObject(content);
             int listId = await _listDataHandlingService.SaveListData(jsonData);
-            return Ok($"Saved with id: {listId}");
+            return Ok();
         }
+
         [HttpGet("getAllLists")]
         public async Task<IActionResult> LoadAllLists([FromBody] Requests content)
         {
             string targetUserId = content.userId;
             var lists = await _listDataHandlingService.LoadAllLists(targetUserId);
-            return Ok(lists);
+            var serializedLists = JsonConvert.SerializeObject(lists);
+            return Ok(serializedLists);
         }
+
         [HttpPost("loadSpecificList")]
         public async Task<IActionResult> LoadSpecificList([FromBody] Requests content)
         {
             string targetUserId = content.userId;
             string targetListName = content.listName;
-            dynamic listContents = _listDataHandlingService.LoadSingleList(targetUserId, targetListName);
+            var listContents = _listDataHandlingService.LoadSingleList(targetUserId, targetListName);
             return Ok(listContents);
         }
+
         [HttpDelete("deleteList")]
         public async Task<IActionResult> DeleteList([FromBody] Requests content)
         {
@@ -82,3 +90,5 @@ namespace fullAPInet6.Controllers
         }
     }
 }
+
+//https://localhost:7239/api/RequestHandling/getAllLists
