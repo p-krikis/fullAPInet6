@@ -52,7 +52,7 @@ namespace fullAPInet6.Controllers
             return Ok("Deleted");
         }
 
-        //listHandling below
+        //-----------------------listHandling below------------------------//
 
         [HttpPost("saveListData")]
         public async Task<IActionResult> SaveList([FromBody] ListParsingModels content)
@@ -67,8 +67,8 @@ namespace fullAPInet6.Controllers
         {
             string targetUserId = content.userId;
             var lists = await _listDataHandlingService.LoadAllLists(targetUserId);
-            var serializedLists = JsonConvert.SerializeObject(lists);
-            return Ok(serializedLists);
+            //var serializedLists = JsonConvert.SerializeObject(lists);
+            return Ok(lists);
         }
 
         [HttpPost("loadSpecificList")]
@@ -86,7 +86,7 @@ namespace fullAPInet6.Controllers
             string targetUserId = content.userId;
             string targetListName = content.listName;
             await _listDataHandlingService.DeleteSpecificList(targetUserId, targetListName);
-            return Ok();
+            return Ok("deleted");
         }
     }
 }
