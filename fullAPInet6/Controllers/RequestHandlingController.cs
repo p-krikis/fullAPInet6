@@ -57,8 +57,10 @@ namespace fullAPInet6.Controllers
         [HttpPost("saveListData")]
         public async Task<IActionResult> SaveList([FromBody] ListParsingModels content)
         {
+            string listName = content.ListName;
+            string userId = content.UserId;
             string jsonData = JsonConvert.SerializeObject(content);
-            int listId = await _listDataHandlingService.SaveListData(jsonData);
+            int listId = await _listDataHandlingService.SaveListData(listName, userId, jsonData);
             return Ok();
         }
 
