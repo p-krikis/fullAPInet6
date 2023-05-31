@@ -36,7 +36,7 @@ namespace fullAPInet6.Services
             return id;
         }
 
-        public async Task<List<(string listName, DateTime timeCreated)>> LoadAllLists(string targetUserId)
+        public async Task<List<ReturnType>> LoadAllLists(string targetUserId)
         {
             using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
@@ -47,11 +47,15 @@ namespace fullAPInet6.Services
 
                     using (var reader = await command.ExecuteReaderAsync())
                     {
-                        var responseList = new List<(string listName, DateTime timeCreated)>();
+                        List<ReturnType> responseList = new List<ReturnType>();
 
                         while (await reader.ReadAsync())
                         {
-                            responseList.Add((reader.GetString(0), reader.GetDateTime(1)));
+                            responseList.Add(new ReturnType()
+                            {
+                                listName = reader.GetString(0),
+                                timeCreated = reader.GetDateTime(1).ToString()
+                            });
                         }
                         return responseList;
                     }

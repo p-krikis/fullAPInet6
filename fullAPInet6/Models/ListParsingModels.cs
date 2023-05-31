@@ -7,4 +7,10 @@
         public string? UserId { get; set; }
         public string? ListName { get; set; }
     }
+
+    public class ReturnType
+    {
+        public string listName { get; set; }
+        public string timeCreated { get; set; }
+    }
 }
