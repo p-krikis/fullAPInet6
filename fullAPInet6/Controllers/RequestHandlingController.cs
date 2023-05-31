@@ -64,7 +64,7 @@ namespace fullAPInet6.Controllers
             return Ok();
         }
 
-        [HttpGet("getAllLists")]
+        [HttpPost("getAllLists")]
         public async Task<IActionResult> LoadAllLists([FromBody] Requests content)
         {
             string targetUserId = content.userId;
