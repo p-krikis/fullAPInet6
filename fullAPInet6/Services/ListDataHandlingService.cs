@@ -1,6 +1,5 @@
 ﻿using Dapper;
 using fullAPInet6.Models;
-using Microsoft.Extensions.ObjectPool;
 using Newtonsoft.Json;
 using System.Data.SqlClient;
 
@@ -63,12 +62,12 @@ namespace fullAPInet6.Services
             }
         }
 
-        public async Task<(string[]? nameData, string[]? descData)> LoadSingleList(string targetUserId, string targetListName)
+        public async Task<string> LoadSingleList(string targetUserId, string targetListName) //WHYT DOES THIS NOT WORK FOR FUCK SAKE
         {
             using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
-                using (var command = new SqlCommand("SELECT nameData, descData FROM [dbo].[jsonList] WHERE userid = @userid AND listName = @listName", connection))
+                using (var command = new SqlCommand("SELECT jsonString FROM [dbo].[jsonList] WHERE userid = @userid AND listName = @listName", connection))
                 {
                     command.Parameters.AddWithValue("@userid", targetUserId);
                     command.Parameters.AddWithValue("@listName", targetListName);
@@ -78,25 +77,55 @@ namespace fullAPInet6.Services
                         {
                             if (await reader.ReadAsync())
                             {
-                                string concNameData = reader.GetString(0);
-                                string concDescData = reader.GetString(1);
-                                string[] splitNameData = concNameData.Split(',');
-                                string[] splitDescData = concDescData.Split(',');
-                                return (splitNameData, splitDescData);
+                                var returnedData = reader.GetString(0);
+                                return returnedData;
                             }
                             else
                             {
-                                return (null, null);
+                                return null;
                             }
                         }
                         catch
                         {
-                            return (null, null);
+                            return null;
                         }
                     }
                 }
             }
         }
+
+        //public async Task<List<(string jsonString, string timeCreated)>> FetchListData(string targetUserId, string targetListName)
+        //{
+        //    using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+        //    {
+        //        connection.Open();
+        //        using (var command = new SqlCommand("SELECT jsonString FROM [dbo].[jsonList] WHERE userid = @userid AND listName = @listName", connection))
+        //        {
+        //            command.Parameters.AddWithValue("@listName", targetListName);
+        //            command.Parameters.AddWithValue("@userid", targetUserId);
+        //            using (var reader = await command.ExecuteReaderAsync())
+        //            {
+        //                var result = new List<(string jsonString, string timeCreated)>();
+        //                try
+        //                {
+        //                    if (await reader.ReadAsync())
+        //                    {
+        //                        result.Add((reader.GetString(0), reader.GetDateTime(1).ToString()));
+        //                        return result;
+        //                    }
+        //                    else
+        //                    {
+        //                        return null;
+        //                    }
+        //                }
+        //                catch
+        //                {
+        //                    return null;
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
 
         public async Task DeleteSpecificList(string targetUserId, string targetListName)
         {

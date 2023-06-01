@@ -1,11 +1,7 @@
 ﻿using fullAPInet6.Models;
 using fullAPInet6.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace fullAPInet6.Controllers
 {

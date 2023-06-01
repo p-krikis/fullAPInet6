@@ -13,4 +13,9 @@
         public string listName { get; set; }
         public string timeCreated { get; set; }
     }
+
+    public class JsonStringReturn
+    {
+        public string jsonString { get; set; }
+    }
 }
