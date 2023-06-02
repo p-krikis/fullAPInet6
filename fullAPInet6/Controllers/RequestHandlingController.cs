@@ -11,11 +11,13 @@ namespace fullAPInet6.Controllers
     {
         private readonly UserInfoHandlingService _userInfoHandling;
         private readonly ListDataHandlingService _listDataHandlingService;
+        private readonly ListDataReconstructionService _listDataReconstructionService;
 
         public RequestHandlingController(UserInfoHandlingService userInfoHandling, ListDataHandlingService listDataHandlingService)
         {
             _userInfoHandling = userInfoHandling;
             _listDataHandlingService = listDataHandlingService;
+            _listDataReconstructionService = new ListDataReconstructionService();
         }
 
         [HttpPost("postSignupInfo")]
@@ -68,13 +70,15 @@ namespace fullAPInet6.Controllers
             return Ok(lists);
         }
 
-        [HttpPost("loadSpecificList")]
-        public async Task<IActionResult> LoadSpecificList([FromBody] Requests content)
+        [HttpPost("loadspecificlist")]
+        public async Task<IActionResult> loadspecificlist([FromBody] Requests content)
         {
-            string targetUserId = content.userId;
-            string targetListName = content.listName;
-            var listContents = _listDataHandlingService.LoadSingleList(targetUserId, targetListName);
-            return Ok(listContents);
+            string targetuserid = content.userId;
+            string targetlistname = content.listName;
+            var listcontents = await _listDataHandlingService.LoadSingleList(targetuserid, targetlistname);
+            ListParsingModels listData = JsonConvert.DeserializeObject<ListParsingModels>(listcontents);
+            var listInfo = _listDataReconstructionService.RebuildData(listData);
+            return Ok(listInfo);
         }
 
         [HttpDelete("deleteList")]

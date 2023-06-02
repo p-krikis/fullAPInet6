@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using fullAPInet6.Models;
-using Newtonsoft.Json;
 using System.Data.SqlClient;
+using System.Reflection.PortableExecutable;
 
 namespace fullAPInet6.Services
 {
@@ -16,7 +16,7 @@ namespace fullAPInet6.Services
 
         public async Task<int> SaveListData(string listName, string userId, string jsonData)
         {
-            ListParsingModels jsonDataContent = JsonConvert.DeserializeObject<ListParsingModels>(jsonData);
+            //ListParsingModels jsonDataContent = JsonConvert.DeserializeObject<ListParsingModels>(jsonData);
             //string concNameData = String.Join(",", jsonDataContent.NameData); //string[] nameData = concNameData.Split(','); --- to split the concatenatedStrings
             //string concDescData = String.Join(",", jsonDataContent.DescData); //string[] descData = concDescData.Split(',');
             //string jsonTimeCreated = JsonConvert.SerializeObject(DateTime.Now.ToString());
@@ -40,7 +40,7 @@ namespace fullAPInet6.Services
             using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
-                using (var command = new SqlCommand("SELECT listName, timeCreated FROM [dbo].[jsonList] WHERE userid = @userid", connection))
+                using (var command = new SqlCommand("SELECT listid, listName, timeCreated FROM [dbo].[jsonList] WHERE userid = @userid", connection))
                 {
                     command.Parameters.AddWithValue("@userid", targetUserId);
 
@@ -52,8 +52,9 @@ namespace fullAPInet6.Services
                         {
                             responseList.Add(new ReturnType()
                             {
-                                listName = reader.GetString(0),
-                                timeCreated = reader.GetDateTime(1).ToString()
+                                listid = reader.GetInt32(0),
+                                listName = reader.GetString(1),
+                                timeCreated = reader.GetDateTime(2).ToString()
                             });
                         }
                         return responseList;
@@ -62,8 +63,9 @@ namespace fullAPInet6.Services
             }
         }
 
-        public async Task<string> LoadSingleList(string targetUserId, string targetListName) //WHYT DOES THIS NOT WORK FOR FUCK SAKE
+        public async Task<string> LoadSingleList(string targetUserId, string targetListName)
         {
+            var test = "awdawd";
             using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
@@ -71,14 +73,14 @@ namespace fullAPInet6.Services
                 {
                     command.Parameters.AddWithValue("@userid", targetUserId);
                     command.Parameters.AddWithValue("@listName", targetListName);
+
                     using (var reader = await command.ExecuteReaderAsync())
                     {
                         try
                         {
                             if (await reader.ReadAsync())
                             {
-                                var returnedData = reader.GetString(0);
-                                return returnedData;
+                                return reader.GetString(0);
                             }
                             else
                             {

@@ -1,4 +1,6 @@
-﻿namespace fullAPInet6.Models
+﻿using System.Diagnostics.Contracts;
+
+namespace fullAPInet6.Models
 {
     public class ListParsingModels
     {
@@ -10,12 +12,14 @@
 
     public class ReturnType
     {
-        public string listName { get; set; }
-        public string timeCreated { get; set; }
+        public int? listid { get; set; }
+        public string? listName { get; set; }
+        public string? timeCreated { get; set; }
     }
 
-    public class JsonStringReturn
+    public class ReturnData
     {
-        public string jsonString { get; set; }
+        public string[]? nameData { get; set; }
+        public string[]? descData { get; set; }
     }
 }
