@@ -18,12 +18,11 @@ namespace fullAPInet6.Services
         {
             UserParsingModels parsedData = JsonConvert.DeserializeObject<UserParsingModels>(jsonString);
             int userListId;
-            string bob= parsedData.Username;
             using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
                 await connection.OpenAsync();
-                var sqlQuery = "INSERT INTO [dbo].[userInfoList] (Username, Email, Password, UserId) VALUES (@username, @email, @password, @userid)";
-                userListId = await connection.QuerySingleOrDefaultAsync<int>(sqlQuery, new { username = parsedData.Username, email = parsedData.Email, password = parsedData.Password, userid = parsedData.UserId });
+                var sqlQuery = "INSERT INTO [dbo].[userInfoFull] (Username, Email, Password, UserId, DisplayName, Role) VALUES (@username, @email, @password, @userid, @displayname, @role)";
+                userListId = await connection.QuerySingleOrDefaultAsync<int>(sqlQuery, new { username = parsedData.Username, email = parsedData.Email, password = parsedData.Password, userid = parsedData.UserId, displayName = parsedData.DisplayName, role = parsedData.Role });
 
             }
             return userListId;
@@ -35,7 +34,7 @@ namespace fullAPInet6.Services
             using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
-                using (var command = new SqlCommand("SELECT password, userid FROM [dbo].[userInfoList] WHERE email = @email", connection))
+                using (var command = new SqlCommand("SELECT password, userid FROM [dbo].[userInfoFull] WHERE email = @email", connection))
                 {
                     command.Parameters.AddWithValue("@email", email);
                     var result = await command.ExecuteReaderAsync();
@@ -66,13 +65,41 @@ namespace fullAPInet6.Services
                 }
             }
         }
-        public async Task DeleteUserByListId(int userListId)
+        public async Task<List<UserInfoResponse>> UserInfo(string targetUserId)
         {
             using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
-                using (var command = new SqlCommand("DELETE FROM [dbo].[userInfoList] WHERE userListId = @userListId", connection))
+                connection.Open();
+                using (var command = new SqlCommand("SELECT email, username, displayName, role FROM [dbo].[userInfoFull] WHERE userid = @userid", connection))
                 {
-                    command.Parameters.AddWithValue("@userListId", userListId);
+                    command.Parameters.AddWithValue("@userid", targetUserId);
+
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        List<UserInfoResponse> responseList = new List<UserInfoResponse>();
+
+                        while (await reader.ReadAsync())
+                        {
+                            responseList.Add(new UserInfoResponse()
+                            {
+                                email = reader.GetString(0),
+                                username = reader.GetString(1),
+                                displayName = reader.GetString(2),
+                                role = reader.GetString(3)
+                            });
+                        }
+                        return responseList;
+                    }
+                }
+            }
+        }
+        public async Task DeleteUserByListId(string userid)
+        {
+            using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            {
+                using (var command = new SqlCommand("DELETE FROM [dbo].[userInfoFull] WHERE userid = @userid", connection))
+                {
+                    command.Parameters.AddWithValue("@userid", userid);
                     await connection.OpenAsync();
                     await command.ExecuteNonQueryAsync();
                 }

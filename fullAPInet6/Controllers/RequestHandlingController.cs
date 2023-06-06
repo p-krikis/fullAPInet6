@@ -42,11 +42,19 @@ namespace fullAPInet6.Controllers
                 return Ok(result);
             }
         }
-
-        [HttpDelete("deleteUserByListId/{userListId}")]
-        public async Task<IActionResult> DeleteUser(int userListId)
+        [HttpPost("fetchUserInfo")]
+        public async Task<IActionResult> FetchUserInfo([FromBody] Requests content)
         {
-            await _userInfoHandling.DeleteUserByListId(userListId);
+            string userid = content.userId;
+            var userInfo = await _userInfoHandling.UserInfo(userid);
+            return Ok(userInfo);
+        }
+
+        [HttpDelete("deleteUser")]
+        public async Task<IActionResult> DeleteUser([FromBody] Requests content)
+        {
+            string userid = content.userId;
+            await _userInfoHandling.DeleteUserByListId(userid);
             return Ok("Deleted");
         }
 
