@@ -49,6 +49,14 @@ namespace fullAPInet6.Controllers
             var userInfo = await _userInfoHandling.UserInfo(userid);
             return Ok(userInfo);
         }
+        [HttpPut("updateInfo")]
+        public async Task<IActionResult> UpdateUserInfo([FromBody] UpdatedInfo updInfo) 
+        {
+            string targetUID = updInfo.UserId;
+            string jsonString = JsonConvert.SerializeObject(updInfo);
+            await _userInfoHandling.UpdateUserInfo(targetUID, jsonString);
+            return Ok();
+        }
 
         [HttpDelete("deleteUser")]
         public async Task<IActionResult> DeleteUser([FromBody] Requests content)

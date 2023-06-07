@@ -93,34 +93,40 @@ namespace fullAPInet6.Services
                 }
             }
         }
-        //public async Task<string> UpdateUserInfo (string targetUserId)
-        //{
-        //    using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
-        //    {
-        //        connection.Open();
-        //        using (var command = new SqlCommand("UPDATE email, username, displayName, role FROM [dbo].[userInfoFull] WHERE userid = @userid", connection))
-        //        {
-        //            command.Parameters.AddWithValue("@userid", targetUserId);
+        public async Task<int> UpdateUserInfo(string targetUserId, string jsonContent)
+        {
+            //UpdatedInfo updatedInfo = JsonConvert.DeserializeObject<UpdatedInfo>(jsonContent)
+            //using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            //{
+            //    connection.Open();
+            //    using (var command = new SqlCommand("UPDATE email, username, displayName, role FROM [dbo].[userInfoFull] WHERE userid = @userid", connection))
+            //    {
+            //        command.Parameters.AddWithValue("@userid", targetUserId);
 
-        //            using (var reader = await command.ExecuteReaderAsync())
-        //            {
-        //                List<UserInfoResponse> responseList = new List<UserInfoResponse>();
+            //        using (var reader = await command.ExecuteReaderAsync())
+            //        {
 
-        //                while (await reader.ReadAsync())
-        //                {
-        //                    responseList.Add(new UserInfoResponse()
-        //                    {
-        //                        email = reader.GetString(0),
-        //                        username = reader.GetString(1),
-        //                        displayName = reader.GetString(2),
-        //                        role = reader.GetString(3)
-        //                    });
-        //                }
-        //                return responseList;
-        //            }
-        //        }
-        //    }
-        //}
+            //        }
+            //    }
+            //}
+            UpdatedInfo updatedInfo = JsonConvert.DeserializeObject<UpdatedInfo>(jsonContent);
+            int updUserListId;
+
+            using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            {
+                await connection.OpenAsync();
+                var sqlQuery = "UPDATE userInfoFull SET Username = @username, Email = @Email, DisplayName = @DisplayName, Role = @Role WHERE userid = @userid";
+                updUserListId = await connection.ExecuteAsync(sqlQuery, new { username = updatedInfo.Username, email = updatedInfo.Email, displayName = updatedInfo.DisplayName, role = updatedInfo.Role, userid = updatedInfo.UserId });
+            }
+
+            return updUserListId;
+
+
+
+
+
+
+        }
         public async Task DeleteUserByListId(string userid)
         {
             using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
