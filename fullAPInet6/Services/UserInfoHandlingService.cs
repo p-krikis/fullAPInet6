@@ -95,20 +95,6 @@ namespace fullAPInet6.Services
         }
         public async Task<int> UpdateUserInfo(string targetUserId, string jsonContent)
         {
-            //UpdatedInfo updatedInfo = JsonConvert.DeserializeObject<UpdatedInfo>(jsonContent)
-            //using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
-            //{
-            //    connection.Open();
-            //    using (var command = new SqlCommand("UPDATE email, username, displayName, role FROM [dbo].[userInfoFull] WHERE userid = @userid", connection))
-            //    {
-            //        command.Parameters.AddWithValue("@userid", targetUserId);
-
-            //        using (var reader = await command.ExecuteReaderAsync())
-            //        {
-
-            //        }
-            //    }
-            //}
             UpdatedInfo updatedInfo = JsonConvert.DeserializeObject<UpdatedInfo>(jsonContent);
             int updUserListId;
 
@@ -120,12 +106,6 @@ namespace fullAPInet6.Services
             }
 
             return updUserListId;
-
-
-
-
-
-
         }
         public async Task DeleteUserByListId(string userid)
         {

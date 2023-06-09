@@ -1,7 +1,6 @@
 ﻿using Dapper;
 using fullAPInet6.Models;
 using System.Data.SqlClient;
-using System.Reflection.PortableExecutable;
 
 namespace fullAPInet6.Services
 {
