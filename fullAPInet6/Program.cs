@@ -1,4 +1,5 @@
 using fullAPInet6.Services;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,8 @@ builder.Services.AddCors(options =>
                           .AllowAnyHeader();
                });
 });
+//builder.Services.AddMediatR(c => c.RegisterServicesFromAssemblyContaining<Program>());
+
 
 var app = builder.Build();
 

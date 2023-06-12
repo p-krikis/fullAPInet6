@@ -45,14 +45,14 @@ namespace fullAPInet6.Controllers
             }
         }
         [HttpPost("fetchUserInfo")]
-        public async Task<IActionResult> FetchUserInfo([FromBody] Requests content)
+        public async Task<IActionResult> FetchUserInfo([FromBody] RequestData content)
         {
             string userid = content.userId;
             var userInfo = await _userInfoHandling.UserInfo(userid);
             return Ok(userInfo);
         }
         [HttpPut("updateInfo")]
-        public async Task<IActionResult> UpdateUserInfo([FromBody] UpdatedInfo updInfo) 
+        public async Task<IActionResult> UpdateUserInfo([FromBody] UpdatedInfo updInfo)
         {
             string targetUID = updInfo.UserId;
             string jsonString = JsonConvert.SerializeObject(updInfo);
@@ -61,7 +61,7 @@ namespace fullAPInet6.Controllers
         }
 
         [HttpDelete("deleteUser")]
-        public async Task<IActionResult> DeleteUser([FromBody] Requests content)
+        public async Task<IActionResult> DeleteUser([FromBody] RequestData content)
         {
             string userid = content.userId;
             await _userInfoHandling.DeleteUserByListId(userid);
@@ -81,7 +81,7 @@ namespace fullAPInet6.Controllers
         }
 
         [HttpPost("getAllLists")]
-        public async Task<IActionResult> LoadAllLists([FromBody] Requests content)
+        public async Task<IActionResult> LoadAllLists([FromBody] RequestData content)
         {
             string targetUserId = content.userId;
             var lists = await _listDataHandlingService.LoadAllLists(targetUserId);
@@ -89,7 +89,7 @@ namespace fullAPInet6.Controllers
         }
 
         [HttpPost("loadspecificlist")]
-        public async Task<IActionResult> loadspecificlist([FromBody] Requests content)
+        public async Task<IActionResult> loadspecificlist([FromBody] RequestData content)
         {
             string targetuserid = content.userId;
             string targetlistname = content.listName;
@@ -100,7 +100,7 @@ namespace fullAPInet6.Controllers
         }
 
         [HttpDelete("deleteList")]
-        public async Task<IActionResult> DeleteList([FromBody] Requests content)
+        public async Task<IActionResult> DeleteList([FromBody] RequestData content)
         {
             string targetUserId = content.userId;
             string targetListName = content.listName;
@@ -110,7 +110,6 @@ namespace fullAPInet6.Controllers
     }
 }
 
-//https://localhost:7239/api/RequestHandling/getAllLists
 
 //using MediatR;
 //using Microsoft.AspNetCore.Mvc;
@@ -145,7 +144,7 @@ namespace fullAPInet6.Controllers
 //        }
 
 //        [HttpPost("fetchUserInfo")]
-//        public async Task<IActionResult> FetchUserInfo([FromBody] Requests content)
+//        public async Task<IActionResult> FetchUserInfo([FromBody] RequestData content)
 //        {
 //            var request = new FetchUserInfoRequest(content.userId);
 //            IActionResult userInfo = await _mediator.Send(request);
@@ -161,7 +160,7 @@ namespace fullAPInet6.Controllers
 //        }
 
 //        [HttpDelete("deleteUser")]
-//        public async Task<IActionResult> DeleteUser([FromBody] Requests content)
+//        public async Task<IActionResult> DeleteUser([FromBody] RequestData content)
 //        {
 //            var request = new DeleteUserRequest(content.userId);
 //            IActionResult result = await _mediator.Send(request);
@@ -177,7 +176,7 @@ namespace fullAPInet6.Controllers
 //        }
 
 //        [HttpPost("getAllLists")]
-//        public async Task<IActionResult> LoadAllLists([FromBody] Requests content)
+//        public async Task<IActionResult> LoadAllLists([FromBody] RequestData content)
 //        {
 //            var request = new LoadAllListsRequest(content.userId);
 //            IActionResult lists = await _mediator.Send(request);
@@ -185,7 +184,7 @@ namespace fullAPInet6.Controllers
 //        }
 
 //        [HttpPost("loadspecificlist")]
-//        public async Task<IActionResult> loadspecificlist([FromBody] Requests content)
+//        public async Task<IActionResult> loadspecificlist([FromBody] RequestData content)
 //        {
 //            var request = new LoadSpecificListRequest(content.userId, content.listName);
 //            IActionResult listInfo = await _mediator.Send(request);
@@ -193,7 +192,7 @@ namespace fullAPInet6.Controllers
 //        }
 
 //        [HttpDelete("deleteList")]
-//        public async Task<IActionResult> DeleteList([FromBody] Requests content)
+//        public async Task<IActionResult> DeleteList([FromBody] RequestData content)
 //        {
 //            var request = new DeleteListRequest(content.userId, content.listName);
 //            IActionResult result = await _mediator.Send(request);

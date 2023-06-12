@@ -10,7 +10,7 @@
         public string? Role { get; set; }
     }
 
-    public class Requests
+    public class RequestData
     {
         public string? userId { get; set; }
         public string? listName { get; set; }
