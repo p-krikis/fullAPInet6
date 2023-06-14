@@ -1,9 +1,8 @@
 using fullAPInet6.Services;
+using MediatR;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<UserInfoHandlingService>();
@@ -18,15 +17,13 @@ builder.Services.AddCors(options =>
                           .AllowAnyHeader();
                });
 });
-//builder.Services.AddMediatR(c => c.RegisterServicesFromAssemblyContaining<Program>());
 
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
 var app = builder.Build();
 
 app.UseCors("AllowAllOrigins");
 app.UseRouting();
-
-// Configure the HTTP request pipeline.
 
 app.UseHttpsRedirection();
 
