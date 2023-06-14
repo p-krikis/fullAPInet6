@@ -27,44 +27,44 @@ namespace fullAPInet6.Services
             }
             return userListId;
         }
-        //public async Task<string> AuthUser(string jsonString)
-        //{
-        //    UserParsingModels parsedData = JsonConvert.DeserializeObject<UserParsingModels>(jsonString);
-        //    string email = parsedData.Email;
-        //    using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
-        //    {
-        //        connection.Open();
-        //        using (var command = new SqlCommand("SELECT password, userid FROM [dbo].[userInfoFull] WHERE email = @email", connection))
-        //        {
-        //            command.Parameters.AddWithValue("@email", email);
-        //            var result = await command.ExecuteReaderAsync();
-        //            try
-        //            {
-        //                if (await result.ReadAsync())
-        //                {
-        //                    string fetchedPassword = result.GetString(0);
-        //                    if (parsedData.Password == fetchedPassword)
-        //                    {
-        //                        string userId = result.GetString(1);
-        //                        return userId;
-        //                    }
-        //                    else
-        //                    {
-        //                        return null;
-        //                    }
-        //                }
-        //                else
-        //                {
-        //                    return null;
-        //                }
-        //            }
-        //            catch 
-        //            { 
-        //                return null;
-        //            }
-        //        }
-        //    }
-        //}
+        public async Task<string> AuthUser(string jsonString)
+        {
+            UserParsingModels parsedData = JsonConvert.DeserializeObject<UserParsingModels>(jsonString);
+            string email = parsedData.Email;
+            using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            {
+                connection.Open();
+                using (var command = new SqlCommand("SELECT password, userid FROM [dbo].[userInfoFull] WHERE email = @email", connection))
+                {
+                    command.Parameters.AddWithValue("@email", email);
+                    var result = await command.ExecuteReaderAsync();
+                    try
+                    {
+                        if (await result.ReadAsync())
+                        {
+                            string fetchedPassword = result.GetString(0);
+                            if (parsedData.Password == fetchedPassword)
+                            {
+                                string userId = result.GetString(1);
+                                return userId;
+                            }
+                            else
+                            {
+                                return null;
+                            }
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    }
+                    catch
+                    {
+                        return null;
+                    }
+                }
+            }
+        }
         //public async Task<List<UserInfoResponse>> UserInfo(string targetUserId)
         //{
         //    using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))

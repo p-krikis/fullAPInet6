@@ -25,6 +25,20 @@ namespace fullAPInet6.Controllers
             int userId = await _mediator.Send(command);
             return StatusCode(201);
         }
+        [HttpPost("submittedInfo")]
+        public async Task<IActionResult> CheckLoginInfo([FromBody] UserParsingModels content)
+        {
+            var command = new GetLoginInfoCommand(content);
+            string returnedResult = await _mediator.Send(command);
+            if (returnedResult != null)
+            {
+                return Ok(returnedResult);
+            }
+            else
+            {
+                return Unauthorized();
+            }
+        }
     }
 
     //[HttpPost("postLoginInfo")]
