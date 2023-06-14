@@ -9,11 +9,11 @@ namespace fullAPInet6.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RequestHandlingController : ControllerBase
+    public class UserInfoController : ControllerBase
     {
         private readonly IMediator _mediator;
 
-        public RequestHandlingController(IMediator mediator)
+        public UserInfoController(IMediator mediator)
         {
             _mediator = mediator;
         }
@@ -23,7 +23,7 @@ namespace fullAPInet6.Controllers
         {
             var command = new SaveSignupInfoCommand(content);
             int userId = await _mediator.Send(command);
-            return Ok(userId);
+            return StatusCode(201);
         }
     }
 
@@ -63,46 +63,6 @@ namespace fullAPInet6.Controllers
     //    string userid = content.userId;
     //    await _userInfoHandling.DeleteUserByListId(userid);
     //    return Ok("Deleted");
-    //}
-
-    ////-----------------------listHandling below------------------------//
-
-    //[HttpPost("saveListData")]
-    //public async Task<IActionResult> SaveList([FromBody] ListParsingModels content)
-    //{
-    //    string listName = content.ListName;
-    //    string userId = content.UserId;
-    //    string jsonData = JsonConvert.SerializeObject(content);
-    //    int listId = await _listDataHandlingService.SaveListData(listName, userId, jsonData);
-    //    return Ok();
-    //}
-
-    //[HttpPost("getAllLists")]
-    //public async Task<IActionResult> LoadAllLists([FromBody] RequestData content)
-    //{
-    //    string targetUserId = content.userId;
-    //    var lists = await _listDataHandlingService.LoadAllLists(targetUserId);
-    //    return Ok(lists);
-    //}
-
-    //[HttpPost("loadspecificlist")]
-    //public async Task<IActionResult> loadspecificlist([FromBody] RequestData content)
-    //{
-    //    string targetuserid = content.userId;
-    //    string targetlistname = content.listName;
-    //    var listcontents = await _listDataHandlingService.LoadSingleList(targetuserid, targetlistname);
-    //    ListParsingModels listData = JsonConvert.DeserializeObject<ListParsingModels>(listcontents);
-    //    var listInfo = _listDataReconstructionService.RebuildData(listData);
-    //    return Ok(listInfo);
-    //}
-
-    //[HttpDelete("deleteList")]
-    //public async Task<IActionResult> DeleteList([FromBody] RequestData content)
-    //{
-    //    string targetUserId = content.userId;
-    //    string targetListName = content.listName;
-    //    await _listDataHandlingService.DeleteSpecificList(targetUserId, targetListName);
-    //    return Ok("deleted");
     //}
 }
 
@@ -196,3 +156,11 @@ namespace fullAPInet6.Controllers
 //        }
 //    }
 //}
+
+
+//===ENDPOINTS===//
+//https://localhost:7239/api/UserInfo/postSignupInfo        //
+//https://localhost:7239/api/UserInfo/postLoginInfo         //
+//https://localhost:7239/api/UserInfo/fetchUserInfo         //
+//https://localhost:7239/api/UserInfo/updateInfo            //
+//https://localhost:7239/api/UserInfo/deleteUser            //
