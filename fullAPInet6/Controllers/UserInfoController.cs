@@ -39,29 +39,17 @@ namespace fullAPInet6.Controllers
                 return Unauthorized();
             }
         }
+        [HttpPost("fetchUserInfo")]
+        public async Task<IActionResult> FetchUserInfo([FromBody] RequestData content)
+        {
+            var command = new FetchProfileInfoCommand(content);
+            var returnedResult = await _mediator.Send(command);
+            return Ok(returnedResult);
+        }
     }
 
-    //[HttpPost("postLoginInfo")]
-    //public async Task<IActionResult> GetLoginInfo([FromBody] UserParsingModels content)
-    //{
-    //    string jsonString = JsonConvert.SerializeObject(content);
-    //    string result = await _userInfoHandling.AuthUser(jsonString);
-    //    if (result == null)
-    //    {
-    //        return Unauthorized();
-    //    }
-    //    else
-    //    {
-    //        return Ok(result);
-    //    }
-    //}
-    //[HttpPost("fetchUserInfo")]
-    //public async Task<IActionResult> FetchUserInfo([FromBody] RequestData content)
-    //{
-    //    string userid = content.userId;
-    //    var userInfo = await _userInfoHandling.UserInfo(userid);
-    //    return Ok(userInfo);
-    //}
+
+
     //[HttpPut("updateInfo")]
     //public async Task<IActionResult> UpdateUserInfo([FromBody] UpdatedInfo updInfo)
     //{
