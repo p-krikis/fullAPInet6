@@ -65,10 +65,6 @@ namespace fullAPInet6.Controllers
             await _userInfoHandling.DeleteUserByListId(userid);
             return Ok("Deleted");
         }
-
-        //-----------------------listHandling below------------------------//
-
-        
     }
 }
 
