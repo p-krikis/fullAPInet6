@@ -11,49 +11,54 @@ namespace fullAPInet6.Controllers
     [ApiController]
     public class ListHandlingController : ControllerBase
     {
-        private readonly IMediator _mediator;
+        private readonly UserInfoHandlingService _userInfoHandling;
+        private readonly ListDataHandlingService _listDataHandlingService;
+        private readonly ListDataReconstructionService _listDataReconstructionService;
 
-        public ListHandlingController(IMediator mediator)
+        public ListHandlingController(UserInfoHandlingService userInfoHandling, ListDataHandlingService listDataHandlingService)
         {
-            _mediator = mediator;
+            _userInfoHandling = userInfoHandling;
+            _listDataHandlingService = listDataHandlingService;
+            _listDataReconstructionService = new ListDataReconstructionService();
         }
-        //[HttpPost("saveListData")]
-        //public async Task<IActionResult> SaveList([FromBody] ListParsingModels content)
-        //{
-        //    string listName = content.ListName;
-        //    string userId = content.UserId;
-        //    string jsonData = JsonConvert.SerializeObject(content);
-        //    int listId = await _listDataHandlingService.SaveListData(listName, userId, jsonData);
-        //    return Ok();
-        //}
 
-        //[HttpPost("getAllLists")]
-        //public async Task<IActionResult> LoadAllLists([FromBody] RequestData content)
-        //{
-        //    string targetUserId = content.userId;
-        //    var lists = await _listDataHandlingService.LoadAllLists(targetUserId);
-        //    return Ok(lists);
-        //}
+        [HttpPost("saveListData")]
+        public async Task<IActionResult> SaveList([FromBody] ListParsingModels content)
+        {
+            string listName = content.ListName;
+            string userId = content.UserId;
+            string jsonData = JsonConvert.SerializeObject(content);
+            int listId = await _listDataHandlingService.SaveListData(listName, userId, jsonData);
+            return Ok();
+        }
 
-        //[HttpPost("loadspecificlist")]
-        //public async Task<IActionResult> loadspecificlist([FromBody] RequestData content)
-        //{
-        //    string targetuserid = content.userId;
-        //    string targetlistname = content.listName;
-        //    var listcontents = await _listDataHandlingService.LoadSingleList(targetuserid, targetlistname);
-        //    ListParsingModels listData = JsonConvert.DeserializeObject<ListParsingModels>(listcontents);
-        //    var listInfo = _listDataReconstructionService.RebuildData(listData);
-        //    return Ok(listInfo);
-        //}
+        [HttpPost("getAllLists")]
+        public async Task<IActionResult> LoadAllLists([FromBody] RequestData content)
+        {
+            string targetUserId = content.userId;
+            var lists = await _listDataHandlingService.LoadAllLists(targetUserId);
+            return Ok(lists);
+        }
 
-        //[HttpDelete("deleteList")]
-        //public async Task<IActionResult> DeleteList([FromBody] RequestData content)
-        //{
-        //    string targetUserId = content.userId;
-        //    string targetListName = content.listName;
-        //    await _listDataHandlingService.DeleteSpecificList(targetUserId, targetListName);
-        //    return Ok("deleted");
-        //}
+        [HttpPost("loadspecificlist")]
+        public async Task<IActionResult> loadspecificlist([FromBody] RequestData content)
+        {
+            string targetuserid = content.userId;
+            string targetlistname = content.listName;
+            var listcontents = await _listDataHandlingService.LoadSingleList(targetuserid, targetlistname);
+            ListParsingModels listData = JsonConvert.DeserializeObject<ListParsingModels>(listcontents);
+            var listInfo = _listDataReconstructionService.RebuildData(listData);
+            return Ok(listInfo);
+        }
+
+        [HttpDelete("deleteList")]
+        public async Task<IActionResult> DeleteList([FromBody] RequestData content)
+        {
+            string targetUserId = content.userId;
+            string targetListName = content.listName;
+            await _listDataHandlingService.DeleteSpecificList(targetUserId, targetListName);
+            return Ok("deleted");
+        }
     }
 }
 
