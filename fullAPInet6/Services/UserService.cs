@@ -10,7 +10,7 @@ namespace fullAPInet6.Services
 
         public UserService()
         {
-            MongoClient client = new("mongodb+srv://pkrikis:<PASSWORD_HERE>@fullstackclustertest.qdnrxbu.mongodb.net/?retryWrites=true&w=majority");
+            MongoClient client = new("mongodb+srv://<USERNAME_HERE>:<PASSWORD_HERE>@fullstackclustertest.qdnrxbu.mongodb.net/?retryWrites=true&w=majority");
             IMongoDatabase db = client.GetDatabase("FullstackDB");
             _users = db.GetCollection<UserModels>("Users");
             _lists = db.GetCollection<ListModels>("Lists");

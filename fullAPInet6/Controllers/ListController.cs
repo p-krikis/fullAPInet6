@@ -21,7 +21,7 @@ namespace fullAPInet6.Controllers
             var result = await _listService.ListSave(list);
             if (result != null)
             {
-                return StatusCode(201, $"Saved list with the name{list.ListName}");
+                return StatusCode(201, $"Saved list with the name {list.ListName}");
             }
             else
             {
